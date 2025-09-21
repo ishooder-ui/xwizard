@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xwizard - 最欢乐的Meme币</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FFD700;
+            --secondary: #FF69B4;
+            --accent: #00FFFF;
+            --dark: #1a1a2e;
+            --light: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* 导航栏 */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(26, 26, 46, 0.9);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-shadow: 2px 2px 0 var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .language-btn {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .language-btn.active {
+            background: var(--primary);
+            color: var(--dark);
+            font-weight: bold;
+        }
+        
+        .language-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+        
+        .cta-button {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 主区域 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 5% 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, rgba(26,26,46,0) 70%);
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            text-shadow: 5px 5px 0 var(--secondary);
+            line-height: 1;
+        }
+        
+        .hero p {
+            font-size: 1.8rem;
+            max-width: 800px;
+            margin-bottom: 2.5rem;
+            color: var(--light);
+        }
+        
+        .meme-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--primary);
+            margin: 2rem 0;
+            box-shadow: 0 0 30px var(--secondary);
+            transition: all 0.5s;
+        }
+        
+        .meme-image:hover {
+            transform: rotate(10deg) scale(1.1);
+            box-shadow: 0 0 50px var(--accent);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .secondary-button {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid var(--primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .secondary-button:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* 代币地址显示区域 */
+        .token-display {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 0.5rem;
+            margin: 1rem 0;
+            border: 2px solid var(--primary);
+            max-width: 500px;
+        }
+        
+        .token-address {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--light);
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .copy-btn:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+        
+        /* 特性部分 */
+        .features {
+            padding: 6rem 5%;
+            background: rgba(255, 215, 0, 0.05);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px dashed var(--primary);
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: scale(1.05);
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid var(--secondary);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        /* 社区部分 */
+        .community {
+            padding: 6rem 5%;
+            background: rgba(255, 105, 180, 0.05);
+            text-align: center;
+        }
+        
+        .community-stats {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 16px;
+            min-width: 200px;
+            border: 2px solid var(--accent);
+        }
+        
+        .stat-item h3 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3rem 5% 2rem;
+            text-align: center;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            transform: translateY(-5px) rotate(10deg);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            color: var(--light);
+            opacity: 0.7;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.3rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .token-display {
+                flex-direction: column;
+                width: 90%;
+            }
+            
+            .token-address {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        /* 钱包连接状态样式 */
+        .wallet-connected {
+            background: linear-gradient(90deg, #00FF00, #00CC66) !important;
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--dark);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid var(--primary);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .modal p {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        /* 通知样式 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 8px;
+            background: var(--primary);
+            color: var(--dark);
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="logo">
+            <img src="logo.ico" alt="网站Logo" width="40" height="40">
+            <span class="lang" key="title">Xwizard</span>
+        </div>
+        
+        <div class="nav-links">
+            <a href="#community" class="lang" key="community">社区</a>
+            <a href="#buy" class="lang" key="buy">购买</a>
+          
+            
+            <div class="language-switcher">
+                <button class="language-btn active" data-lang="zh">中文</button>
+                <button class="language-btn" data-lang="en">English</button>
+            </div>
+        </div>
+        
+        <button id="connectWalletBtn" class="cta-button lang" key="connect_wallet">连接钱包</button>
+    </nav>
+    
+    <!-- 主区域 -->
+    <section class="hero">
+        <h1 class="lang" key="main_title">Xwizard <span class="shake">🚀</span></h1>
+        <p class="lang" key="main_subtitle">最欢乐的Meme币，带你飞向月球！</p>
+        
+        <img src="header.jpg" alt="Xwizard Meme" class="meme-image floating">
+        
+        <div class="button-group">
+            <button id="buyNowBtn" class="cta-button lang" key="buy_now">立即购买</button>
+            <button class="secondary-button lang" key="whitepaper">白皮书(搞笑版)</button>
+        </div>
+        
+        <!-- 代币地址显示区域 -->
+        <div class="token-display">
+            <div class="token-address" id="tokenAddress">0x742d35Cc6634C0532925a3b844Bc454e4438f44e</div>
+            <button class="copy-btn" id="copyTokenBtn">
+                <i class="fas fa-copy"></i>
+                <span class="lang" key="copy_token">复制地址</span>
+            </button>
+        </div>
+    </section>
+    
+    <!-- 特性部分 -->
+    <section class="features" id="features">
+        <h2 class="section-title lang" key="why_choose">为什么选择 <span class="shake lang" key="doge_moon">Xwizard</span></h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-laugh-squint"></i>
+                </div>
+                <h3 class="lang" key="feature1_title">100% 欢乐</h3>
+                <p class="lang" key="feature1_desc">我们不做严肃的金融产品，只做让你开心的Meme币！</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="lang" key="feature2_title">强大社区</h3>
+                <p class="lang" key="feature2_desc">加入我们的社区，每天都有新梗和欢乐！</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3 class="lang" key="feature3_title">月球之旅</h3>
+                <p class="lang" key="feature3_desc">我们的目标只有一个：飞向月球！</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <h3 class="lang" key="feature4_title">0 实用价值</h3>
+                <p class="lang" key="feature4_desc">我们诚实告诉你：这币真的没什么用，就是好玩！</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 社区部分 -->
+    <section class="community" id="community">
+        <h2 class="section-title lang" key="our_community">我们的<span class="shake lang" key="community_word">社区</span></h2>
+        <p class="lang" key="community_subtitle">加入50万+ Xwizard持有者的欢乐大家庭！</p>
+        
+        <div class="community-stats">
+            <div class="stat-item">
+                <h3>500K+</h3>
+                <p class="lang" key="stat1">社区成员</p>
+            </div>
+            <div class="stat-item">
+                <h3>1M+</h3>
+                <p class="lang" key="stat2">每日meme</p>
+            </div>
+            <div class="stat-item">
+                <h3>∞</h3>
+                <p class="lang" key="stat3">欢乐指数</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="logo">
+            <img src="logo.ico" alt="网站Logo" width="40" height="40">
+            <span class="lang" key="footer_title">Xwizard</span>
+        </div>
+        
+        <p class="lang" key="footer_subtitle">最不严肃的加密货币，只为带来欢乐！</p>
+        
+        <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="https://t.me/Xwizard_xlayerA"><i class="fab fa-telegram"></i></a>
+        </div>
+        
+        <div class="copyright">
+            <p class="lang" key="copyright1">© 2023 Xwizard. 这不是金融建议，我们甚至不知道自己在做什么。</p>
+            <p class="lang" key="copyright2">投资有风险，特别是投资这种明显是玩笑的币。</p>
+        </div>
+    </footer>
+
+    <!-- 钱包连接模态框 -->
+    <div id="walletModal" class="modal">
+        <div class="modal-content">
+            <h3 class="lang" key="connect_wallet">连接钱包</h3>
+            <p class="lang" key="wallet_modal_desc">请确保您已安装OKX钱包扩展程序</p>
+            <div class="modal-buttons">
+                <button id="confirmConnect" class="cta-button">确认连接</button>
+                <button id="cancelConnect" class="secondary-button">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知 -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // 语言切换功能
+        const translations = {
+            zh: {
+                title: "Xwizard",
+                about: "关于",
+                features: "特性",
+                community: "社区",
+                buy: "购买",
+                memes: "MEME",
+                connect_wallet: "连接钱包",
+                main_title: "Xwizard 🚀",
+                main_subtitle: "最欢乐的Meme币，带你飞向月球！",
+                buy_now: "立即购买",
+                whitepaper: "白皮书(搞笑版)",
+                why_choose: "为什么选择",
+                doge_moon: "Xwizard",
+                feature1_title: "100% 欢乐",
+                feature1_desc: "我们不做严肃的金融产品，只做让你开心的Meme币！",
+                feature2_title: "强大社区",
+                feature2_desc: "加入我们的社区，每天都有新梗和欢乐！",
+                feature3_title: "月球之旅",
+                feature3_desc: "我们的目标只有一个：飞向月球！",
+                feature4_title: "0 实用价值",
+                feature4_desc: "我们诚实告诉你：这币真的没什么用，就是好玩！",
+                our_community: "我们的",
+                community_word: "社区",
+                community_subtitle: "加入50万+ Xwizard持有者的欢乐大家庭！",
+                stat1: "社区成员",
+                stat2: "每日meme",
+                stat3: "欢乐指数",
+                footer_title: "Xwizard",
+                footer_subtitle: "最不严肃的加密货币，只为带来欢乐！",
+                copyright1: "© 2023 Xwizard. 这不是金融建议，我们甚至不知道自己在做什么。",
+                copyright2: "投资有风险，特别是投资这种明显是玩笑的币。",
+                wallet_modal_desc: "请确保您已安装OKX钱包扩展程序",
+                wallet_connected: "钱包已连接",
+                wallet_failed: "连接失败",
+                wallet_not_installed: "未检测到OKX钱包，请先安装",
+                copy_token: "复制地址",
+                token_copied: "代币地址已复制!"
+            },
+            en: {
+                title: "Xwizard",
+                about: "About",
+                features: "Features",
+                community: "Community",
+                buy: "Buy",
+                memes: "MEME",
+                connect_wallet: "Connect Wallet",
+                main_title: "Xwizard 🚀",
+                main_subtitle: "The happiest Meme coin, taking you to the moon!",
+                buy_now: "Buy Now",
+                whitepaper: "Whitepaper (Funny Version)",
+                why_choose: "Why Choose",
+                doge_moon: "Xwizard",
+                feature1_title: "100% Fun",
+                feature1_desc: "We don't make serious financial products, just Meme coins that make you happy!",
+                feature2_title: "Strong Community",
+                feature2_desc: "Join our community, new memes and fun every day!",
+                feature3_title: "To The Moon",
+                feature3_desc: "We have only one goal: Fly to the moon!",
+                feature4_title: "0 Utility",
+                feature4_desc: "We honestly tell you: This coin is really useless, just for fun!",
+                our_community: "Our",
+                community_word: "Community",
+                community_subtitle: "Join 500K+ Xwizard holders in our happy family!",
+                stat1: "Members",
+                stat2: "Daily Memes",
+                stat3: "Happiness Index",
+                footer_title: "Xwizard",
+                footer_subtitle: "The least serious cryptocurrency, just for fun!",
+                copyright1: "© 2023 Xwizard. This is not financial advice, we don't even know what we're doing.",
+                copyright2: "Investing is risky, especially in this obviously joke coin.",
+                wallet_modal_desc: "Please make sure you have the OKX Wallet extension installed",
+                wallet_connected: "Wallet Connected",
+                wallet_failed: "Connection Failed",
+                wallet_not_installed: "OKX Wallet not detected, please install it first",
+                copy_token: "Copy Address",
+                token_copied: "Token address copied!"
+            }
+        };
+
+        // 切换语言函数
+        function switchLanguage(lang) {
+            document.querySelectorAll('.lang').forEach(element => {
+                const key = element.getAttribute('key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // 更新按钮状态
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // 更新HTML语言属性
+            document.documentElement.lang = lang;
+        }
+
+        // 显示通知
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification show';
+            
+            setTimeout(() => {
+                notification.className = 'notification';
+            }, 2000);
+        }
+
+        // 钱包连接功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const connectWalletBtn = document.getElementById('connectWalletBtn');
+            const buyNowBtn = document.getElementById('buyNowBtn');
+            const walletModal = document.getElementById('walletModal');
+            const confirmConnect = document.getElementById('confirmConnect');
+            const cancelConnect = document.getElementById('cancelConnect');
+            const copyTokenBtn = document.getElementById('copyTokenBtn');
+            const tokenAddress = document.getElementById('tokenAddress');
+            
+            // 检查是否已连接钱包
+            checkWalletConnection();
+            
+            // 点击连接钱包按钮
+            connectWalletBtn.addEventListener('click', function() {
+                walletModal.style.display = 'flex';
+            });
+            
+            // 点击立即购买按钮 - 直接连接OKX钱包
+            buyNowBtn.addEventListener('click', connectOKXWallet);
+            
+            // 取消连接
+            cancelConnect.addEventListener('click', function() {
+                walletModal.style.display = 'none';
+            });
+            
+            // 确认连接
+            confirmConnect.addEventListener('click', connectOKXWallet);
+            
+            // 复制代币地址
+            copyTokenBtn.addEventListener('click', function() {
+                navigator.clipboard.writeText(tokenAddress.textContent).then(() => {
+                    const currentLang = document.documentElement.lang;
+                    showNotification(translations[currentLang].token_copied);
+                }).catch(err => {
+                    console.error('无法复制文本: ', err);
+                });
+            });
+            
+            // 检查OKX钱包是否已安装
+            function isOKXWalletInstalled() {
+                return typeof window.okxwallet !== 'undefined';
+            }
+            
+            // 连接OKX钱包函数
+            async function connectOKXWallet() {
+                if (!isOKXWalletInstalled()) {
+                    alert(translations[document.documentElement.lang].wallet_not_installed);
+                    walletModal.style.display = 'none';
+                    return;
+                }
+                
+                try {
+                    // 请求账户连接
+                    const accounts = await window.okxwallet.request({ 
+                        method: 'eth_requestAccounts' 
+                    });
+                    
+                    if (accounts && accounts.length > 0) {
+                        // 连接成功
+                        const account = accounts[0];
+                        updateUIAfterConnection(account);
+                        walletModal.style.display = 'none';
+                        
+                        // 显示成功消息
+                        showNotification(translations[document.documentElement.lang].wallet_connected);
+                        
+                        // 钱包连接成功后，可以在这里添加跳转到购买页面的逻辑
+                        // 例如: window.location.href = '购买页面URL';
+                    }
+                } catch (error) {
+                    console.error('Wallet connection error:', error);
+                    showNotification(translations[document.documentElement.lang].wallet_failed, 'error');
+                    walletModal.style.display = 'none';
+                }
+            }
+            
+            // 更新UI显示已连接状态
+            function updateUIAfterConnection(account) {
+                // 缩短地址显示
+                const shortenedAddress = `${account.substring(0, 6)}...${account.substring(account.length - 4)}`;
+                
+                // 更新按钮文本和样式
+                connectWalletBtn.textContent = shortenedAddress;
+                connectWalletBtn.classList.add('wallet-connected');
+                
+                // 更新购买按钮状态
+                const currentLang = document.documentElement.lang;
+                buyNowBtn.textContent = translations[currentLang].buy_now + ' 🚀';
+                
+                // 移除点击事件，防止重复连接
+                connectWalletBtn.removeEventListener('click', connectOKXWallet);
+                
+                // 可以添加点击显示账户详情的功能
+                connectWalletBtn.addEventListener('click', function() {
+                    alert(`已连接钱包: ${account}`);
+                });
+                
+                // 保存连接状态到localStorage
+                localStorage.setItem('walletConnected', 'true');
+                localStorage.setItem('walletAddress', account);
+            }
+            
+            // 检查是否已有连接的钱包
+            function checkWalletConnection() {
+                const isConnected = localStorage.getItem('walletConnected') === 'true';
+                const savedAddress = localStorage.getItem('walletAddress');
+                
+                if (isConnected && savedAddress) {
+                    updateUIAfterConnection(savedAddress);
+                }
+            }
+            
+            // 初始化语言
+            switchLanguage('zh');
+            
+            // 添加语言按钮点击事件
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchLanguage(btn.dataset.lang);
+                });
+            });
+            
+            // 原有的交互效果
+            document.querySelectorAll('.shake').forEach(el => {
+                el.addEventListener('mouseover', () => {
+                    el.style.animation = 'shake 0.5s ease-in-out infinite';
+                });
+                el.addEventListener('mouseout', () => {
+                    el.style.animation = '';
+                });
+            });
+            
+            // 随机颜色变化
+            setInterval(() => {
+                const colors = ['#FFD700', '#FF69B4', '#00FFFF', '#FF00FF', '#00FF00'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                document.documentElement.style.setProperty('--primary', randomColor);
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
